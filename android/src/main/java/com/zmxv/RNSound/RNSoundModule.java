@@ -80,7 +80,7 @@ public class RNSoundModule extends ReactContextBaseJavaModule {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 if (!mp.isLooping()) {
-                    mp.release();
+                    mp.setOnErrorListener(null);
                     callback.invoke(true);
                 }
             }
@@ -88,7 +88,7 @@ public class RNSoundModule extends ReactContextBaseJavaModule {
         player.setOnErrorListener(new OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
-                mp.release();
+                mp.setOnCompletionListener(null);
                 callback.invoke(false);
                 return true;
             }
@@ -168,13 +168,10 @@ public class RNSoundModule extends ReactContextBaseJavaModule {
         return constants;
     }
 
-    /**
-     * +   * Ensure any audios that are playing when app exits are stopped and released
-     * +
-     */
     @Override
     public void onCatalystInstanceDestroy() {
         super.onCatalystInstanceDestroy();
+
         Set<Map.Entry<Integer, MediaPlayer>> entries = playerPool.entrySet();
         for (Map.Entry<Integer, MediaPlayer> entry : entries) {
             MediaPlayer mp = entry.getValue();
