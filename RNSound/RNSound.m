@@ -65,7 +65,7 @@ RCT_EXPORT_MODULE();
 
 RCT_EXPORT_METHOD(enable:(BOOL)enabled) {
   AVAudioSession *session = [AVAudioSession sharedInstance];
-  [session setCategory: AVAudioSessionCategoryAmbient error: nil];
+  [session setCategory: AVAudioSessionCategoryPlayback error: nil];
   [session setActive: enabled error: nil];
 }
 
