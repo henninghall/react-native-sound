@@ -81,7 +81,18 @@ public class RNSoundModule extends ReactContextBaseJavaModule {
             public void onCompletion(MediaPlayer mp) {
                 if (!mp.isLooping()) {
                     mp.setOnErrorListener(null);
-                    callback.invoke(true);
+                    try {
+                        callback.invoke(true);
+                    } catch (Exception e) {
+                        /* Temp catch preventing 3rd party lib crash. Waiting for lib update.
+
+                        java.lang.RuntimeException·Illegal callback invocation from native module.
+                        This callback type only permits a single invocation from native code.
+                        CallbackImpl.java:32com.facebook.react.bridge.CallbackImpl.invoke
+                        RNSoundModule.java:84com.zmxv.RNSound.RNSoundModule$1.onCompletion
+
+                        */
+                    }
                 }
             }
         });
